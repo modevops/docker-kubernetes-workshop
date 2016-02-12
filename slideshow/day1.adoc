@@ -88,28 +88,52 @@ Email: benevides@redhat.com |
 
 
 // ************** Agenda  ********
-[#agenda]
+[#agenda-welcome]
 == Agenda
 
-* *Introduction*
+* *Welcome*
 * Setup Environment
 * Docker Basics, Run Containers
 * Lunch Break (12:00PM)
+* Create images
 * JavaEE and Docker
 * JavaEE, Microservices and Containers
 * Docker Compose
 * Openshift for Java EE Developers
+* Question and Answers
 
 
+// ************** Agenda  ********
+[#agenda-setup]
+== Agenda
 
+* Welcome
+* *Setup Environment*
+* Docker Basics, Run Containers
+* Lunch Break (12:00PM)
+* Create images
+* JavaEE and Docker
+* JavaEE, Microservices and Containers
+* Docker Compose
+* Openshift for Java EE Developers
+* Question and Answers
 
+// ************** Agenda  ********
+[#agenda-docker-basics]
+== Agenda
 
+* Welcome
+* Setup Environment
+* *Docker Basics, Run Containers*
+* Lunch Break (12:00PM)
+* Create images
+* JavaEE and Docker
+* JavaEE, Microservices and Containers
+* Docker Compose
+* Openshift for Java EE Developers
+* Question and Answers
 
-
-
-
-
-// ************** transition page  - docker deep dive*******************************************************************
+// ************ transition page  - Docker Deep Dive ****************************************************
 [#transition1-deep-dive, data-background-image="revealjs-redhat/image/1156524-bg_redhat.png" data-background-color="#cc0000"]
 == {blank-space}
 
@@ -714,6 +738,38 @@ docker rm tomcat8
 Then neither `docker ps` nor `docker ps -a` should show the container.
 
 
+
+
+// ************** Agenda  ********
+[#agenda-lunch]
+== Agenda
+
+* Welcome
+* Setup Environment
+* Docker Basics, Run Containers
+* *Lunch Break (12:00PM)*
+* Create images
+* JavaEE and Docker
+* JavaEE, Microservices and Containers
+* Docker Compose
+* Openshift for Java EE Developers
+* Question and Answers
+
+// ************** Agenda  ********
+[#agenda-create-images]
+== Agenda
+
+* Welcome
+* Setup Environment
+* Docker Basics, Run Containers
+* Lunch Break (12:00PM)
+* *Create images*
+* JavaEE and Docker
+* JavaEE, Microservices and Containers
+* Docker Compose
+* Openshift for Java EE Developers
+* Question and Answers
+
 // ************** transition page **************************************************************************************
 [#docker-registry, data-background-image="revealjs-redhat/image/1156524-bg_redhat.png" data-background-color="#cc0000"]
 == {blank-space}
@@ -1069,6 +1125,36 @@ output:
 
 
 
+// ************** Agenda  ********
+[#agenda-javaee]
+== Agenda
+
+* Welcome
+* Setup Environment
+* Docker Basics, Run Containers
+* Lunch Break (12:00PM)
+* Create images
+* *JavaEE and Docker*
+* JavaEE, Microservices and Containers
+* Docker Compose
+* Openshift for Java EE Developers
+* Question and Answers
+
+// ************** Agenda  ********
+[#agenda-microservices]
+== Agenda
+
+* Welcome
+* Setup Environment
+* Docker Basics, Run Containers
+* Lunch Break (12:00PM)
+* Create images
+* JavaEE and Docker
+* *JavaEE, Microservices and Containers*
+* Docker Compose
+* Openshift for Java EE Developers
+* Question and Answers
+
 // ************** transition page *************************************************************************************
 [#deploy-javaee, data-background-image="revealjs-redhat/image/1156524-bg_redhat.png" data-background-color="#cc0000"]
 == {blank-space}
@@ -1162,6 +1248,58 @@ docker run -d -p 9990:9990 -p 8080:8080 --name wildfly arungupta/javaee7-hol
 ```
 
 Navigate to link:http://localhost:8080/movieplex7[http://localhost:8080/movieplex7] to see the Java EE application
+
+
+
+
+
+
+// ************** Agenda  ********
+[#agenda-compose]
+== Agenda
+
+* Welcome
+* Setup Environment
+* Docker Basics, Run Containers
+* Lunch Break (12:00PM)
+* Create images
+* JavaEE and Docker
+* JavaEE, Microservices and Containers
+* *Docker Compose*
+* Openshift for Java EE Developers
+* Question and Answers
+
+// ************** Agenda  ********
+[#agenda-openshift]
+== Agenda
+
+* Welcome
+* Setup Environment
+* Docker Basics, Run Containers
+* Lunch Break (12:00PM)
+* Create images
+* JavaEE and Docker
+* JavaEE, Microservices and Containers
+* Docker Compose
+* *Openshift for Java EE Developers*
+* Question and Answers
+
+// ************** Agenda  ********
+[#agenda-qa]
+== Agenda
+
+* Welcome
+* Setup Environment
+* Docker Basics, Run Containers
+* Lunch Break (12:00PM)
+* Create images
+* JavaEE and Docker
+* JavaEE, Microservices and Containers
+* Docker Compose
+* Openshift for Java EE Developers
+* *Question and Answers*
+
+
 
 
 
