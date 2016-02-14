@@ -57,13 +57,14 @@ Blog: http://blog.eisele.net/
 
 Twitter: https://twitter.com/myfear[@myfear]
 
-Email: meisele@redhat.com |
+Email: markus@eisele.net |
 |===
 
-* Committer on Apache ActiveMQ, Apache Camel, Fabric8
-* Technology evangelist, recovering consultant
-* Spent a lot of time working with one of the largest Microservices, web-scale, unicorn companies
-* Frequent blogger and speaker about open-source, cloud, microservices
+* Java Champion
+* Enterprise Java evangelist, recovering consultant
+* Worked 16+ years in Enterprises on large scale applications
+* Frequent blogger, writer, speaker
+* http://developers.redhat.com/promotions/distributed-javaee-architecture/[Modern Enterprise Java Design Pattern]
 
 
 // ************** who - Benevides ********
@@ -94,7 +95,9 @@ Email: benevides@redhat.com |
 * *Welcome*
 * Setup Environment
 * Docker Basics, Run Containers
-* Lunch Break (12:00PM)
+
+* **Lunch Break (12:00PM)**
+
 * Create images
 * JavaEE and Docker
 * JavaEE, Microservices and Containers
@@ -102,6 +105,14 @@ Email: benevides@redhat.com |
 * Openshift for Java EE Developers
 * Question and Answers
 
+// ************** Agenda  ********
+[#agenda-welcome2]
+== Welcome
+
+* Mix of presentation and hands-on
+* Ask questions along the way
+* Do more if you have time.
+* All material online / *CONTRIBUTE* :)
 
 // ************** Agenda  ********
 [#agenda-setup]
@@ -117,6 +128,13 @@ Email: benevides@redhat.com |
 * Docker Compose
 * Openshift for Java EE Developers
 * Question and Answers
+
+// ************** Empty  ********
+[#lnk-workshop]
+== Start working on your environment
+
+http://bit.ly/DEE_setup
+
 
 // ************** Agenda  ********
 [#agenda-docker-basics]
@@ -168,52 +186,6 @@ image:docker-logo.png[role="right"]
 
 [#block,width="100px",top="220px",left="400px"]
 image:linux.png[role="right"]
-
-// ************** what is it********
-[#cgroups]
-== cgroups
-
-* Built into Kernel (RHEL7/Debian/etc)
-* Generically isolates resource usage (CPU, memory, disk, network)
-* Guarantee resources to app/set of apps
-* Can be adjusted on the fly
-* Can monitor the cgroup itself to see utilization
-
-
-[#block,width="100px",top="220px",left="470px"]
-image:day1/intro-cgroups.png[width="85%",height="85%"]
-
-// ************** what is it********
-[#namespaces]
-== Kernel namespaces
-
-* Isolating views of the system
-* Can make a process think it's the only process
-* Built-in way to "virtualize" a process
-
-[#block,width="100px",top="220px",left="470px"]
-image:day1/scope.png[width="85%",height="85%"]
-
-// ************** what is it********
-[#namespaceslist]
-== Kernel namespaces
-
-* *mnt* (mount points, filesystem)
-* *pid* (processes)
-* *net* (network stack)
-* *ipc* (inter-process comms)
-* *uts* (hostname)
-* *user* (UIDs)
-
-// ************** what is it********
-[#linuxcaps]
-== Linux capabilities
-
-* *"root"* has *all* capabilities
-* a fine-grained division of "root"'s permissions for a process
-* *CAP_NET_ADMIN* - modify routing tables, firewalling, NAT, etc
-* *CAP_KILL* -  bypass any checks for sending the kill signals
-* *CAP_SYS_ADMIN* - mount, set hostname, etc
 
 // ************** what is it********
 [#docker-bring-together]
@@ -326,11 +298,6 @@ image:day1/workflow1.png[width="100%",height="100%"]
 
 [#block,width="100px",top="100px",left="50px"]
 image:day1/workflow2.png[width="100%",height="100%"]
-
-
-
-
-
 
 
 
@@ -737,6 +704,12 @@ docker rm tomcat8
 
 Then neither `docker ps` nor `docker ps -a` should show the container.
 
+// ************** Empty  ********
+[#lnk-docker-basics]
+== Start working with Docker
+
+http://bit.ly/DEE_basics
+
 
 
 
@@ -966,15 +939,6 @@ CMD ["/home/gerrit/bin/conf-and-run-gerrit.sh"]
 ```
 
 // ************** Docker registry ********
-[#diff-cmd-entrypoing]
-== Difference between CMD and ENTRYPOINT
-
-* *`CMD`* can be overridden at run time
-** docker run -it centos:7 <command_to_run>
-* *`ENTRYPOINT`* fixed command, pass things in as parameters
-** docker run -it centos:7 <params to add>
-
-// ************** Docker registry ********
 [#demo-creating-images]
 == Demo creating Docker images
 
@@ -1118,11 +1082,12 @@ output:
   latest: digest: sha256:0cebcc42cbc25848524eff2cf4aa9d5a47e5d360c5ebfb931e6d33cfd8a38b97 size: 29837
 
 
+// ************** Empty  ********
+[#lnk-docker-images]
+== Build an image
 
 
-
-
-
+http://bit.ly/DEE_images
 
 
 // ************** Agenda  ********
@@ -1140,20 +1105,6 @@ output:
 * Openshift for Java EE Developers
 * Question and Answers
 
-// ************** Agenda  ********
-[#agenda-microservices]
-== Agenda
-
-* Welcome
-* Setup Environment
-* Docker Basics, Run Containers
-* Lunch Break (12:00PM)
-* Create images
-* JavaEE and Docker
-* *JavaEE, Microservices and Containers*
-* Docker Compose
-* Openshift for Java EE Developers
-* Question and Answers
 
 // ************** transition page *************************************************************************************
 [#deploy-javaee, data-background-image="revealjs-redhat/image/1156524-bg_redhat.png" data-background-color="#cc0000"]
@@ -1177,8 +1128,8 @@ Verify your tomcat server is no longer running on `8888` and follow these steps:
 
 
 ```
-docker pull arungupta/wildfly-management
-docker run -d -p 9990:9990 -p 8080:8080 --name wildfly arungupta/wildfly-management
+docker pull arungupta/wildfly-admin
+docker run -d -p 9990:9990 -p 8080:8080 --name wildfly rafabene/wildfly-admin
 docker ps
 
 ```
@@ -1244,15 +1195,42 @@ docker rm wildfly
 Now run the new app:
 
 ```
-docker run -d -p 9990:9990 -p 8080:8080 --name wildfly arungupta/javaee7-hol
+docker run -d -p 9990:9990 -p 8080:8080 --name wildfly rafabene/wildfly-ticketmonster-h2
 ```
 
-Navigate to link:http://localhost:8080/movieplex7[http://localhost:8080/movieplex7] to see the Java EE application
+Navigate to link:http://localhost:8080/movieplex7[http://localhost:8080/ticket-monster] to see the Java EE application
+
+
+// ************** Empty  ********
+[#lnk-docker-javaee]
+== Deploy Java EE Application
+
+
+http://bit.ly/DEE_JavaEE
 
 
 
+// ************** Agenda  ********
+[#agenda-microservices]
+== Agenda
 
+* Welcome
+* Setup Environment
+* Docker Basics, Run Containers
+* Lunch Break (12:00PM)
+* Create images
+* JavaEE and Docker
+* *JavaEE, Microservices and Containers*
+* Docker Compose
+* Openshift for Java EE Developers
+* Question and Answers
 
+[#microservices-slide]
+== Microservices slide
+
+++++
+<iframe src="http://www.slideshare.net/myfear/slideshelf" width="80%" height="80%" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:none;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe>
+++++
 
 // ************** Agenda  ********
 [#agenda-compose]
@@ -1268,6 +1246,11 @@ Navigate to link:http://localhost:8080/movieplex7[http://localhost:8080/movieple
 * *Docker Compose*
 * Openshift for Java EE Developers
 * Question and Answers
+
+[#compose-slide]
+== Docker Compose
+
+http://bit.ly/DEE_compose
 
 // ************** Agenda  ********
 [#agenda-openshift]
