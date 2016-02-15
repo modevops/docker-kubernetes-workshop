@@ -194,15 +194,6 @@ image:linux.png[role="right"]
 [#block,width="100px",top="100px",left="50px"]
 image:day1/docker.png[width="90%",height="90%"]
 
-// ************** what is it********
-[#whyimportant1]
-== Why is this important?
-
-* Image format vs golden image
-* API
-* Packaging
-* Separation of concerns (Devs/Ops)
-* Density, infrastructure utilization
 
 // ************** what is it********
 [#dockerformat]
@@ -276,7 +267,6 @@ image:day1/docker-components.png[width="90%",height="90%"]
 [#dev-workflow]
 == Developer workflow
 
-* work from *vagrant image*
 * can trash and reboot it any time
 * *locally* running docker client
 * Source code in developer IDE
@@ -518,12 +508,6 @@ image:day1/docker-ports.png[width="120%",height="120%"]
 Our Docker Host has been mapped properly, but we cannot reach it from our host (Windows/MacOSX) because the VM does
 not expose those ports.
 
-// ************** Your first Docker ********
-[#map-ports-tomcat]
-== Map ports for tomcat
-
-Enable port forwarding between the VM Host (windows/Mac) and the VM Guest (Docker host):
-
 [#block,width="200px",top="175px",left="150px"]
 image:day1/port-forward.png[width="100%",height="100%"]
 
@@ -611,7 +595,7 @@ Here are some other useful `docker run` flags:
 * *`-P`* expose all published ports on the container
 * *`-p`* map a specific port from the container to the host `host:container`
 
-We will look at *`--link`* and *`--volume`* later today.
+We will look at *`--net`* and *`--volume`* later today.
 
 // ************** Your first Docker ********
 [#run-docker-tomcat-daemon]
@@ -1128,7 +1112,7 @@ Verify your tomcat server is no longer running on `8888` and follow these steps:
 
 
 ```
-docker pull arungupta/wildfly-admin
+docker pull rafabene/wildfly-admin
 docker run -d -p 9990:9990 -p 8080:8080 --name wildfly rafabene/wildfly-admin
 docker ps
 
@@ -1268,6 +1252,15 @@ http://bit.ly/DEE_compose
 * Question and Answers
 
 // ************** Agenda  ********
+[#openshift-content]
+== Openshift for Java EE Developers
+
+[#block,width="200px",top="150px",left="150px"]
+image:http://img-fotki.yandex.ru/get/6610/85893628.0/0_87785_2ecd32f7_M[width="170%",height="170%"]
+
+
+
+// ************** Agenda  ********
 [#agenda-qa]
 == Agenda
 
@@ -1286,11 +1279,6 @@ http://bit.ly/DEE_compose
 
 
 
-
-
-
-
-
 // ************** transition page *************************************************************************************
 [#Communicating between containers, data-background-image="revealjs-redhat/image/1156524-bg_redhat.png" data-background-color="#cc0000"]
 == {blank-space}
@@ -1299,309 +1287,6 @@ http://bit.ly/DEE_compose
 image::{revealjs_cover_image}[]
 
 [#cover-h1,left="0px",top="350px",width="2000px"]
-*Communicating between docker containers*
+*Question and Answers*
 
-
-// ************** Communicating between docker container ********
-[#understand-docker-bridge]
-== Quickly understand default docker networking
-
-[#block,width="200px",top="150px",left="75px"]
-image:day1/docker-network.png[width="170%",height="170%"]
-
-
-// ************** Communicating between docker container ********
-[#understand-docker-links]
-== Linking Containers
-
-* We want containers to communicate with each other
-* Each container has an IP (veth/eth0)
-* Containers can expose virtual ports
-* Docker bridge networking can link containers without going over host network
-* How do we discover IP addresses, etc?
-
-```
-docker run --link <container_name>:alias .....
-```
-
-
-// ************** Communicating between docker container ********
-[#understand-docker-links2]
-== Linking Containers
-
-```
-docker run --link <container_name>:alias .....
-```
-
-* Name your containers!!!!!!!
-* links depend on this
-* `alias` is what your containers will see as environment variables
-
-example:
-
-```
-docker run --rm --name web2 --link db:db training/webapp env
-```
-
-Will create these environment variables:
-
-  DB_NAME=/web2/db
-  DB_PORT=tcp://172.17.0.5:5432
-  DB_PORT_5432_TCP=tcp://172.17.0.5:5432
-  DB_PORT_5432_TCP_PROTO=tcp
-  DB_PORT_5432_TCP_PORT=5432
-  DB_PORT_5432_TCP_ADDR=172.17.0.5
-
-Your applications can then use environment variables to discover the dependent containers/services
-
-
-// ************** Communicating between docker container ********
-[#understand-docker-links-dns]
-== Linking Containers with DNS
-
-```
-docker run -t -i --rm --link db:webdb training/webapp /bin/bash
-```
-
-Check out /etc/hosts inside the container:
-
-  172.17.0.7 aed84ee21bde
-  ...
-  172.17.0.5 webdb 6e5cdeb2d300 db
-
-So we can just refer to containers by name: `http://webdb`
-
-// ************** Communicating between docker container ********
-[#understand-docker-links-notes]
-== Notes about linking containers
-
-* Injecting environment variables is a very powerful concept
-* Can link multiple containers together
-* The linking happens between *one host only*!!
-
-
-// ************** Communicating between docker container ********
-[#understand-docker-links-example]
-== Examples of linking:
-
-Run a database service which will be used by a Java EE application:
-
-```
-docker run --name mysqldb -e MYSQL_USER=mysql -e MYSQL_PASSWORD=mysql -e MYSQL_DATABASE=sample -e MYSQL_ROOT_PASSWORD=supersecret -p 3306:3306 -d mysql
-```
-
-Note, you may need to forward the `mysql` port `3306` in your VM.
-
-Now let's link up a Java EE application
-
-```
-docker run -d --name mywildfly --link mysqldb:db -p 8080:8080 arungupta/wildfly-mysql-javaee7
-```
-
-// ************** Communicating between docker container ********
-[#understand-docker-links-example2]
-== Examples of linking:
-
-Our app is new using the DB, but let's log into the container and verify the environment variables/DNS was set up:
-
-```
-docker exec -it mywildfly bash
-```
-
-then type the following to list environment variables:
-
-```
-env
-```
-
-You can also take a look at the `/etc/hosts` file
-
-```
-cat /etc/hosts`
-```
-
-
-  [jboss@c924917fe4ad ~]$ cat /etc/hosts
-  172.17.0.30     c924917fe4ad
-  127.0.0.1       localhost
-  ::1     localhost ip6-localhost ip6-loopback
-  fe00::0 ip6-localnet
-  ff00::0 ip6-mcastprefix
-  ff02::1 ip6-allnodes
-  ff02::2 ip6-allrouters
-  172.17.0.28     db ef59a1b98326 mysqldb
-  172.17.0.30     mywildfly.bridge
-  172.17.0.18     registry
-  172.17.0.18     registry.bridge
-  172.17.0.28     mysqldb
-  172.17.0.28     mysqldb.bridge
-  172.17.0.30     mywildfly
-
-
-// ************** transition page **************************************************************************************
-[#stateful-containers, data-background-image="revealjs-redhat/image/1156524-bg_redhat.png" data-background-color="#cc0000"]
-== {blank-space}
-
-[#block,width="200px",left="70px",top="0px"]
-image::{revealjs_cover_image}[]
-
-[#cover-h1,left="0px",top="350px",width="2000px"]
-*Stateful containers*
-
-// ************** Volumes ********
-[#docker-no-state]
-== Docker containers have no state!
-
-* Containers are ephemeral!!!
-* Nothing is saved from a container if it goes away
-* Containers get new IP addresses
-* Don't treat containers as VMs: they are not!!
-* But what about stateful applications?
-
-
-// ************** Volumes ********
-[#docker-volumes]
-== Docker volumes
-
-* Docker volumes to the rescue!
-* Persist data outside of the container
-* Can be mapped directly to Host locations
-* Can also be deployed independently of hosts/indirectly
-
-Example:
-
-```
-docker run -d -P --name web -v /webapp training/webapp python app.py
-```
-
-
-// ************** Volumes ********
-[#docker-volumes-example1]
-== Example Docker volumes
-
-Example:
-
-```
-docker run -d -P --name web -v /webapp training/webapp python app.py
-```
-
-[#block,width="200px",top="250px",left="150px"]
-image:day1/docker-vol.png[width="120%",height="120%"]
-
-// ************** Volumes ********
-[#docker-volumes-host]
-== Docker host volumes
-
-We can also map volumes directly to Host storage locations:
-
-* Useful for known locations on Host
-* Can use NFS mounts
-* Files are visible outside of the container and are persisted
-* Can restart new containers up with same location
-
-```
-docker run -d -P --name web -v /src/webapp:/opt/webapp training/webapp python app.py
-```
-
-
-// ************** Volumes ********
-[#docker-volumes-example2]
-== Example Docker host volumes
-
-Example:
-
-```
-docker run -d -P --name web -v /src/webapp:/opt/webapp training/webapp python app.py
-```
-
-[#block,width="200px",top="250px",left="150px"]
-image:day1/docker-vol-host.png[width="120%",height="120%"]
-
-
-// ************** Volumes ********
-[#docker-volumes-container-data]
-== Containers as data volumes
-
-Start a container that will manage the volume
-
-```
-docker create -v /dbdata --name dbdata training/postgres /bin/true
-```
-
-Now other containers can use that container so they're not tied directly to the volumes (mounting them, etc):
-
-```
-docker run -d --volumes-from dbdata --name db1 training/postgres
-```
-
-[#block,width="200px",top="300px",left="75px"]
-image:day1/docker-vol-datacontainer.png[width="120%",height="120%"]
-
-
-// ************** Volumes ********
-[#docker-volumes-jenkins-example1]
-== Jenkins example
-
-Let's take an example using Jenkins. We can fire up Jenkins containers, add build jobs, etc.
-But if we delete the container, the jobs are lost.
-
-```
-docker run -d --name jenkins -p 8080:8080 jenkins
-```
-
-We can save the changes and jobs that jenkins creates by adding a host volume:
-
-```
-docker run -d --name jenkins -p 8080:8080 -v /your/home:/var/jenkins_home jenkins
-```
-
-Now when you run jenkins, you can stop, destroy, and re-run jenkins and your build jobs should be there.
-
-
-
-
-
-
-
-
-// ************** transition page **************************************************************************************
-[#cool-docker, data-background-image="revealjs-redhat/image/1156524-bg_redhat.png" data-background-color="#cc0000"]
-== {blank-space}
-
-[#block,width="200px",left="70px",top="0px"]
-image::{revealjs_cover_image}[]
-
-[#cover-h1,left="0px",top="350px",width="2000px"]
-*Other cool docker stuff*
-
-
-
-
-// ************** Things to know ********
-[#things-to-know]
-== Things to know
-
-* Docker runs on a single host!
-* `/var/lib/docker` needs to be managed!
-* Use only what you need in your images (avoid image bloat)
-* Don't run as root
-* Be careful with docker images on Docker Hub (use trusted images only)
-* Container security... containers do not "contain"
-** http://opensource.com/business/14/7/docker-security-selinux
-* always use image tags
-* Use sanity scripts to boot your process from within container
-* One task per container!
-
-
-
-
-// *********************************
-[#questions]
-== Questions
-
-[.noredheader,cols="65,.<45"]
-|===
-
-.2+|image:questions.png[width="95%",height="95%"]
-a|* Twitter : *{speaker-twitter}*
-|===
+image:questions.png[width="95%",height="95%"]
